@@ -132,7 +132,7 @@ curl -X POST --data '{
 {"jsonrpc":"2.0","result":{"blockchains":[{"id":"277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat","name":"sergiivm","subnetID":"24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1","vmID":"speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT"},{"id":"BR28ypgLATNS6PbtHMiJ7NQ61vfpT27Hj8tAcZ1AHsfU5cz88","name":"C-Chain","subnetID":"11111111111111111111111111111111LpoYY","vmID":"mgj786NP7uDwBCcq6YwThhaN8FLyybkCa4zBWTQbNgmK6k9A6"},{"id":"qzfF3A11KzpcHkkqznEyQgupQrCNS6WV6fTUTwZpEKqhj1QE7","name":"X-Chain","subnetID":"11111111111111111111111111111111LpoYY","vmID":"jvYyfQTxGMJLuGWa55kdP2p2zSUYsQ5Raupu4TW34ZAUBAbtq"}]},"id":1}
 ```
 
-#### Get status of our new Subnet
+### Get status of our new Subnet
 ```
 curl -X POST --data '{
     "jsonrpc":"2.0",
@@ -151,12 +151,18 @@ curl -X POST --data '{
 # Alternative way - automated and simplified
 ### It did work for me once. Next day i was not able to 
 
-- git clone https://github.com/ava-labs/subnet-evm
-- cd subnet-evm
-- ./scripts/run.sh 1.7.8 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
+```
+# Clone subnet env git repository
+git clone https://github.com/ava-labs/subnet-evm
+
+# All in one run script
+# where 1.7.8 is the version of avalanchego
+# and 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC is default admin address with plenty of tokens on the balance.
+cd subnet-evm
+./scripts/run.sh 1.7.8 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
 where 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC is default admin user with a lot of coins on the balance.
 
-In the end we must see something like 
+# In the end we must see something like 
 
 Logs Directory: /var/folders/0z/r8b94v_56v9fc6xk_x2xr2l00000gn/T/runnerlogs884911765
 PID: 25299
@@ -183,7 +189,10 @@ Network Name: Local EVM
 RPC URL: http://localhost:49832/ext/bc/2cZqrPoosCsYZ4qjURSccae1nH8yHvSXB4uBHVAp8Ub4AgdDHm/rpc
 Chain ID: 99999
 Curreny Symbol: LEVM
+```
 
+By scrolliing back through the long output of run.sh script, we will find the following important details:
+```
 Node IDs
 node1: node ID "NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg", URI "http://localhost:49832"
 node2: node ID "NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ", URI "http://localhost:49834"
@@ -197,6 +206,7 @@ funded P-chain: address "P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p", balan
 funded P-chain: address "P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p", balance 30000000000000000 $AVAX in "node3"
 funded P-chain: address "P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p", balance 30000000000000000 $AVAX in "node4"
 funded P-chain: address "P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p", balance 30000000000000000 $AVAX in "node5"
+```
 
 ### Now we have avalanche go with first subnet up and running
 
