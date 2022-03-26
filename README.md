@@ -65,14 +65,40 @@ node4: node ID "NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu", URI "http://127.0.0.1
 node5: node ID "NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5", URI "http://127.0.0.1:53805"
 ```
 
-# Create new custom subnet
+
 We will use RPC calls to one of the Node endpoints from the list above.
 I will use Node1: http://127.0.0.1:42835
-## generate VM ID
+
+# Create new custom subnet
+
+## Produce & use correct subnet binary
+First of all, we have to compile the binary for our new subnet nodes and move it into plugins directory of avalanchego project.
+
+Here we go step by step.
+
+### Build vm binary
+
 ```
-subnet-cli create VMID sergiivm
-# Response:
-# created a new VMID speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT from sergiisvm
+cd $GOPATH/src/github.com/ava-labs/subnet-evm
+# assuming that "srEXiWaHuhNyGwPUi444Tu47ZEDwxTWrbQiuD7FmgSAQ6X7Dy" will be our vm-id
+./scripts/build.sh build/srEXiWaHuhNyGwPUi444Tu47ZEDwxTWrbQiuD7FmgSAQ6X7Dy
+```
+
+The output of the command was like that:
+
+```
+Using branch: master
+Building Subnet EVM Version: v0.2.0; GitCommit: b60b3e0248603e3f820df6ca40fc6d98728d6abf
+# gopkg.in/olebedev/go-duktape.v3
+In file included from _cgo_export.c:4:
+debugger.go:23:13: warning: unused function '_duk_debugger_attach' [-Wunused-function]
+```
+
+### Move vm binary into avalanchego dir
+
+```
+# assuming that subnet-vm and avalanchego are in the same dir
+mv build/srEXiWaHuhNyGwPUi444Tu47ZEDwxTWrbQiuD7FmgSAQ6X7Dy ../avalanchego/build/plugins/
 ```
 
 ## create file with private key under path: .subnet-cli.pk (WITHOUT 0x)
@@ -87,9 +113,9 @@ echo "56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027" > .subne
 subnet-cli wizard \
 --node-ids=NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg,NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ,NodeID-NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN,NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu,NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5 \
 --vm-genesis-path=my-genesis.json \
---vm-id=speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT \
+--vm-id=srEXiWaHuhNyGwPUi444Tu47ZEDwxTWrbQiuD7FmgSAQ6X7Dy \
 --public-uri=http://127.0.0.1:42835 \
---chain-name=sergiivm
+--chain-name=subnetevm
 
 # Response:
 
@@ -126,7 +152,27 @@ created blockchain "277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat" (took 1.
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
 ```
 
-It means that subnet's RPC: RPC URL: http://localhost:42835/ext/bc/277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat/rpc ???
+It means that subnet's RPC URL: http://localhost:42835/ext/bc/277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat/rpc 
+
+Example: RPC URL will be used in MetaMask and Truffle.
+
+## Whitelist our new Subnet on the validator nodes
+
+Execute restart command for the node *with new --whitelisted-subnets value*
+
+```
+# Assuming we had SUBNET ID == 24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1
+avalanche-network-runner control restart-node \
+--request-timeout=3m \
+--log-level debug \
+--endpoint="0.0.0.0:8080" \
+--node-name node1 \
+--avalanchego-path /Users/sergii/go/src/github.com/ava-labs/avalanchego/build/avalanchego \
+--whitelisted-subnets="24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1"
+```
+
+*Note: not 100% sure if we must restart all the nodes, but I did it for all 5 nodes from node1 ... to ... node5*
+
 ## Test:
 curl -X POST --data '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1642680522936}' http://localhost:42835/ext/bc/24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1/rpc ???
 
@@ -160,7 +206,7 @@ curl -X POST --data '{
 
 
 # Alternative way - automated and simplified
-### It did work for me once. Next day i was not able to 
+### It did work for me once. Next day i was not able to use it. Basically, you have to kill that instance of avalanche and run it again.
 
 ```
 # Clone subnet env git repository
@@ -221,7 +267,8 @@ funded P-chain: address "P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p", balan
 
 ### Now we have avalanche go with first subnet up and running
 
-# Alternative 2 (hybrid)
+# Alternative 2 (step by step instead of wizzard)
+
 After avalanche network runner server is running and validator nodes are up: instead of subnet-cli wizard, we will use subnet-cli step by step.
 
 ### Assumption:
@@ -338,12 +385,4 @@ created blockchain "kcGi8DrMiupKtqsssMcnvnBANP8UkmB2qZ6uZe6HoJ5rpSAsh" (took 2.3
 
 ## Whitelist our subnet ID and restart the node
 
-```
-avalanche-network-runner control restart-node \
---request-timeout=3m \
---log-level debug \
---endpoint="0.0.0.0:8080" \
---node-name node3 \
---avalanchego-path /tmp/avalanchego-v1.7.8/build/avalanchego \
---whitelisted-subnets="p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz"
-```
+Follow the same steps as above in the Whitelist section.
