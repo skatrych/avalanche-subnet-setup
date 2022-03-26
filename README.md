@@ -1,6 +1,8 @@
 # avalanche-subnet-setup
 Setting up Avalanche network with custom subnet
 
+## Pre-requisites
+
 # Install Avalanche
 
 ## Install Avalanche network runner
@@ -53,7 +55,8 @@ node5: node ID "NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5", URI "http://127.0.0.1
 ```
 
 # Create new custom subnet
-
+We will use RPC calls to one of the Node endpoints from the list above.
+I will use Node1: http://127.0.0.1:42835
 ## generate VM ID
 ```
 subnet-cli create VMID sergiivm
@@ -62,50 +65,86 @@ subnet-cli create VMID sergiivm
 ```
 
 ## create file with private key under path: .subnet-cli.pk (WITHOUT 0x)
+The private key for the ewoq address (0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC) is 0x56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027.
+
+```
+echo "56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027" > .subnet-cli.pk
+```
 
 ```
 subnet-cli wizard \
 --node-ids=NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg,NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ,NodeID-NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN,NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu,NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5 \
 --vm-genesis-path=my-genesis.json \
 --vm-id=speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT \
---public-uri=http://localhost:8080 \
+--public-uri=http://127.0.0.1:42835 \
 --chain-name=sergiivm
 
 # Response:
 
-waiting for validator 7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
-waiting for validator MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
-waiting for validator NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
-waiting for validator GWPcbFJZFfZreETSoWjPimr846mXEKCtu to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
-waiting for validator P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5 to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
-```
+waiting for validator 7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg to start validating 24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1...(could take a few minutes)
+waiting for validator MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ to start validating 24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1...(could take a few minutes)
+waiting for validator NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN to start validating 24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1...(could take a few minutes)
+waiting for validator GWPcbFJZFfZreETSoWjPimr846mXEKCtu to start validating 24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1...(could take a few minutes)
+waiting for validator P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5 to start validating 24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1...(could take a few minutes)
 
-2022-03-25T20:19:10.942+0100	info	client/p.go:497	creating blockchain	{"subnetId": "NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8", "chainName": "sergiisvm", "vmId": "speJ74oCuF4s9jxavSYsYtCfodpDTY2kMKbxbxbur1FrwZ3v3", "createBlockchainTxFee": 100000000}
-created blockchain "2GxiHHt5RnU7TkS2SVK8X9RtWpKUGWidMaX3ibk7RsD3NDzuit" (took 2.092678ms)
+
+2022-03-26T11:04:39.639+0100	info	client/p.go:497	creating blockchain	{"subnetId": "24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1", "chainName": "sergiivm", "vmId": "speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT", "createBlockchainTxFee": 100000000}
+created blockchain "277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat" (took 1.953167ms)
 
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
 | PRIMARY P-CHAIN ADDRESS | P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p                                                                                                                             |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
-| TOTAL P-CHAIN BALANCE   | 29,999,999.5850000 $AVAX                                                                                                                                                    |
+| TOTAL P-CHAIN BALANCE   | 29,999,999.8950000 $AVAX                                                                                                                                                    |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
-| URI                     | http://localhost:49832                                                                                                                                                      |
+| URI                     | http://127.0.0.1:42835                                                                                                                                                      |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
 | NETWORK NAME            | network-1337                                                                                                                                                                |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
 | SUBNET VALIDATORS       | [7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN GWPcbFJZFfZreETSoWjPimr846mXEKCtu P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5] |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
-| SUBNET ID               | NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8                                                                                                                           |
+| SUBNET ID               | 24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1                                                                                                                          |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
-| BLOCKCHAIN ID           | 2GxiHHt5RnU7TkS2SVK8X9RtWpKUGWidMaX3ibk7RsD3NDzuit                                                                                                                          |
+| BLOCKCHAIN ID           | 277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat                                                                                                                          |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
-| CHAIN NAME              | sergiisvm                                                                                                                                                                   |
+| CHAIN NAME              | sergiivm                                                                                                                                                                    |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
-| VM ID                   | speJ74oCuF4s9jxavSYsYtCfodpDTY2kMKbxbxbur1FrwZ3v3                                                                                                                           |
+| VM ID                   | speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT                                                                                                                           |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
 | VM GENESIS PATH         | my-genesis.json                                                                                                                                                             |
 *-------------------------*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
+```
 
-It means that subnet's RPC: RPC URL: http://localhost:49832/ext/bc/NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8/rpc
+It means that subnet's RPC: RPC URL: http://localhost:42835/ext/bc/277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat/rpc ???
+## Test:
+curl -X POST --data '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1642680522936}' http://localhost:42835/ext/bc/24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1/rpc ???
+
+### Get list of Blockchains
+```
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"platform.getBlockchains",
+    "params" :{}
+}' -H 'content-type:application/json;' 127.0.0.1:42835/ext/P
+
+# Response:
+{"jsonrpc":"2.0","result":{"blockchains":[{"id":"277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat","name":"sergiivm","subnetID":"24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1","vmID":"speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT"},{"id":"BR28ypgLATNS6PbtHMiJ7NQ61vfpT27Hj8tAcZ1AHsfU5cz88","name":"C-Chain","subnetID":"11111111111111111111111111111111LpoYY","vmID":"mgj786NP7uDwBCcq6YwThhaN8FLyybkCa4zBWTQbNgmK6k9A6"},{"id":"qzfF3A11KzpcHkkqznEyQgupQrCNS6WV6fTUTwZpEKqhj1QE7","name":"X-Chain","subnetID":"11111111111111111111111111111111LpoYY","vmID":"jvYyfQTxGMJLuGWa55kdP2p2zSUYsQ5Raupu4TW34ZAUBAbtq"}]},"id":1}
+```
+
+#### Get status of our new Subnet
+```
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"platform.getBlockchainStatus",
+    "params" :{
+        "blockchainID":"277HMm3iqpGx99FeGnWMkKbzQQku35aLz52mjkFJzmWDgdFuat"
+    }
+}' -H 'content-type:application/json;' 127.0.0.1:42835/ext/P
+
+# Response:
+{"jsonrpc":"2.0","result":{"status":"Created"},"id":1}
+```
 
 
 # Alternative way - automated and simplified
