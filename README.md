@@ -221,4 +221,129 @@ funded P-chain: address "P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p", balan
 
 ### Now we have avalanche go with first subnet up and running
 
+# Alternative 2 (hybrid)
+After avalanche network runner server is running and validator nodes are up: instead of subnet-cli wizard, we will use subnet-cli step by step.
 
+### Assumption:
+Nodes list
+- node1: node ID "NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg", URI "http://127.0.0.1:33933"
+- node2: node ID "NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ", URI "http://127.0.0.1:39522"
+- node3: node ID "NodeID-NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN", URI "http://127.0.0.1:22974"
+- node4: node ID "NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu", URI "http://127.0.0.1:37085"
+- node5: node ID "NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5", URI "http://127.0.0.1:37578"
+
+Private key (no 0x in the prefix) is stored in the file .subnet-cli.pk in current directory.
+
+
+```
+subnet-cli create subnet \
+--private-key-path=.subnet-cli.pk \
+--public-uri=http://localhost:33933
+```
+#### Response
+```
+...
+created subnet "p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz" (took 1.000933676s)
+(subnet must be whitelisted beforehand via --whitelisted-subnets flag!)
+
+*-------------------------*---------------------------------------------------*
+| PRIMARY P-CHAIN ADDRESS | P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p   |
+*-------------------------*---------------------------------------------------*
+| TOTAL P-CHAIN BALANCE   | 29,999,999.9000000 $AVAX                          |
+*-------------------------*---------------------------------------------------*
+| URI                     | http://localhost:33933                            |
+*-------------------------*---------------------------------------------------*
+| NETWORK NAME            | network-1337                                      |
+*-------------------------*---------------------------------------------------*
+| CREATED SUBNET ID       | p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz |
+*-------------------------*---------------------------------------------------*
+```
+
+#### IMPORTANT!!! subnet ID (see above, p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz) must be whitelisted before using it.
+
+## Adding subnet-validators to our subnet
+
+```
+subnet-cli add subnet-validator \
+--private-key-path=.subnet-cli.pk \
+--public-uri=http://localhost:33933 \
+--node-ids="NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg" \
+--subnet-id="p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz"
+```
+#### Response:
+```
+added 7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg to subnet p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz validator set (took 1.001485836s)
+
+waiting for validator 7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg to start validating p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz...(could take a few minutes)
+*-------------------------*---------------------------------------------------*
+| PRIMARY P-CHAIN ADDRESS | P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p   |
+*-------------------------*---------------------------------------------------*
+| TOTAL P-CHAIN BALANCE   | 29,999,999.8990000 $AVAX                          |
+*-------------------------*---------------------------------------------------*
+| URI                     | http://localhost:33933                            |
+*-------------------------*---------------------------------------------------*
+| NETWORK NAME            | network-1337                                      |
+*-------------------------*---------------------------------------------------*
+| NODE IDs                | [7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg]               |
+*-------------------------*---------------------------------------------------*
+| SUBNET ID               | p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz |
+*-------------------------*---------------------------------------------------*
+| VALIDATE START          | 2022-03-26T15:10:24+01:00                         |
+*-------------------------*---------------------------------------------------*
+| VALIDATE END            | 2022-09-07T06:00:00+02:00                         |
+*-------------------------*---------------------------------------------------*
+| VALIDATE WEIGHT         | 1,000                                             |
+*-------------------------*---------------------------------------------------*
+```
+
+### Repeating command above for the other node ids
+I've added 4 validators for the subnet.
+
+## Create blockchain on this subnet
+
+```
+subnet-cli create blockchain \
+--private-key-path=.subnet-cli.pk \
+--public-uri=http://localhost:33933 \
+--subnet-id="p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz" \
+--chain-name=serknewvm \
+--vm-id=tGas3T58KzdjLHhBDMnH2TvrddhqTji5iZAMZ3RXs2NLpSnhH \
+--vm-genesis-path=my-genesis.json
+```
+#### Response:
+```
+2022-03-26T15:25:59.475+0100	info	client/p.go:497	creating blockchain	{"subnetId": "p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz", "chainName": "serknewvm", "vmId": "tGas3T58KzdjLHhBDMnH2TvrddhqTji5iZAMZ3RXs2NLpSnhH", "createBlockchainTxFee": 100000000}
+created blockchain "kcGi8DrMiupKtqsssMcnvnBANP8UkmB2qZ6uZe6HoJ5rpSAsh" (took 2.396061ms)
+
+*-------------------------*---------------------------------------------------*
+| PRIMARY P-CHAIN ADDRESS | P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p   |
+*-------------------------*---------------------------------------------------*
+| TOTAL P-CHAIN BALANCE   | 29,999,999.8960000 $AVAX                          |
+*-------------------------*---------------------------------------------------*
+| URI                     | http://localhost:33933                            |
+*-------------------------*---------------------------------------------------*
+| NETWORK NAME            | network-1337                                      |
+*-------------------------*---------------------------------------------------*
+| SUBNET ID               | p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz |
+*-------------------------*---------------------------------------------------*
+| CREATED BLOCKCHAIN ID   | kcGi8DrMiupKtqsssMcnvnBANP8UkmB2qZ6uZe6HoJ5rpSAsh |
+*-------------------------*---------------------------------------------------*
+| CHAIN NAME              | serknewvm                                         |
+*-------------------------*---------------------------------------------------*
+| VM ID                   | tGas3T58KzdjLHhBDMnH2TvrddhqTji5iZAMZ3RXs2NLpSnhH |
+*-------------------------*---------------------------------------------------*
+| VM GENESIS PATH         | my-genesis.json                                   |
+*-------------------------*---------------------------------------------------*
+```
+
+## Whitelist our subnet ID and restart the node
+
+```
+avalanche-network-runner control restart-node \
+--request-timeout=3m \
+--log-level debug \
+--endpoint="0.0.0.0:8080" \
+--node-name node3 \
+--avalanchego-path /tmp/avalanchego-v1.7.8/build/avalanchego \
+--whitelisted-subnets="p433wpuXyJiDhyazPYyZMJeaoPSW76CBZ2x7wrVPLgvokotXz"
+```
