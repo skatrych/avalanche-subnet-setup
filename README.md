@@ -10,8 +10,9 @@ cd ${HOME}/go/src/github.com/ava-labs/avalanche-network-runner
 go install -v ./cmd/avalanche-network-runner
 ```
 
-## Start the server
+## Start the network
 
+### To start runner server
 ```
 avalanche-network-runner server \
 --log-level debug \
@@ -19,7 +20,7 @@ avalanche-network-runner server \
 --grpc-gateway-port=":8081"
 ```
 
-### To ping the server:
+### To ping the runner server:
 ```
 curl -X POST -k http://localhost:8081/v1/ping -d ''
 
@@ -29,30 +30,55 @@ avalanche-network-runner ping \
 --endpoint="0.0.0.0:8080"
 ```
 
+## To start Nodes
+```
+avalanche-network-runner control start \
+--log-level debug \
+--endpoint="0.0.0.0:8080" \
+--avalanchego-path ${HOME}/go/src/github.com/ava-labs/avalanchego/build/avalanchego \
+--whitelisted-subnets="24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1"
+
+# or
+
+# replace with your local path
+curl -X POST -k http://localhost:8081/v1/control/start -d '{"execPath":"/Users/sergii/go/src/github.com/ava-labs/avalanchego/build/avalanchego","whitelistedSubnets":"24tZhrm8j8GCJRE9PomW8FaeqbgGS4UAQjJnqqn8pq5NwYSYV1","logLevel":"INFO"}'
+
+# Response 
+...
+node1: node ID "NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg", URI "http://127.0.0.1:42835"
+node2: node ID "NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ", URI "http://127.0.0.1:30491"
+node3: node ID "NodeID-NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN", URI "http://127.0.0.1:44838"
+node4: node ID "NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu", URI "http://127.0.0.1:45155"
+node5: node ID "NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5", URI "http://127.0.0.1:53805"
+```
+
 # Create new custom subnet
 
 ## generate VM ID
-subnet-cli create VMID sergiis-vm
-Response:
-created a new VMID speJ74oCuF4s9jxavSYsYtCfodpDTY2kMKbxbxbur1FrwZ3v3 from sergiis-vm
+```
+subnet-cli create VMID sergiivm
+# Response:
+# created a new VMID speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT from sergiisvm
+```
 
-create file with private key WITHOUT 0x under path: .subnet-cli.pk
+## create file with private key under path: .subnet-cli.pk (WITHOUT 0x)
 
+```
 subnet-cli wizard \
 --node-ids=NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg,NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ,NodeID-NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN,NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu,NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5 \
 --vm-genesis-path=my-genesis.json \
---vm-id=speJ74oCuF4s9jxavSYsYtCfodpDTY2kMKbxbxbur1FrwZ3v3 \
---public-uri=http://localhost:49832 \
---chain-name=sergiisvm
+--vm-id=speJ74oCutpKqwcovArGTR59htxo4ZATEhxuUSXcJnoZAb4RT \
+--public-uri=http://localhost:8080 \
+--chain-name=sergiivm
 
-Response:
+# Response:
 
 waiting for validator 7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
 waiting for validator MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
 waiting for validator NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
 waiting for validator GWPcbFJZFfZreETSoWjPimr846mXEKCtu to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
 waiting for validator P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5 to start validating NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8...(could take a few minutes)
-
+```
 
 2022-03-25T20:19:10.942+0100	info	client/p.go:497	creating blockchain	{"subnetId": "NhTW2m1dPjc4qKFgvCr56xpSyTmVvBXUFBdT21XSmRhw589e8", "chainName": "sergiisvm", "vmId": "speJ74oCuF4s9jxavSYsYtCfodpDTY2kMKbxbxbur1FrwZ3v3", "createBlockchainTxFee": 100000000}
 created blockchain "2GxiHHt5RnU7TkS2SVK8X9RtWpKUGWidMaX3ibk7RsD3NDzuit" (took 2.092678ms)
