@@ -71,6 +71,7 @@ The private key for the ewoq address (0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
 echo "56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027" > .subnet-cli.pk
 ```
 
+## Create subnet with subnet-cli wizard command
 ```
 subnet-cli wizard \
 --node-ids=NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg,NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ,NodeID-NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN,NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu,NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5 \
