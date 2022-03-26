@@ -3,11 +3,22 @@ Setting up Avalanche network with custom subnet
 
 ## Pre-requisites
 
+- Folder ${HOME}/go/src/github.com/ava-labs exists.
+- The following git repos are cloned under it:
+- https://github.com/ava-labs/avalanche-network-runner
+- https://github.com/ava-labs/avalanchego
+- ENV VARS defined: $GOPATH, $GOBIN
+- Assumption on macOS: $GOPATH == "$HOME/go"
+- subnet-cli installed
+
 # Install Avalanche
+
+** Note: tested for MacOS only!!! **
 
 ## Install Avalanche network runner
 ```
 # to install
+git clone https://github.com/ava-labs/avalanche-network-runner.git
 cd ${HOME}/go/src/github.com/ava-labs/avalanche-network-runner
 go install -v ./cmd/avalanche-network-runner
 ```
